@@ -45,3 +45,4 @@ export async function deletePost(req, res, next) {
     await postRepository.remove(id);
     res.sendStatus(204);
 }
+
