@@ -1,4 +1,4 @@
-import e from "express";
+import express from "express";
 import * as authRepository from "../data/auth.mjs";
 
 export async function signup(req, res, next) {
