@@ -40,22 +40,40 @@ let users = [
         url: "https://randomuser.me/api/portraits/men/29.jpg",
     },
 ];
-export async function createUser(userid, password, name, eamil) {
+export async function createUser(userid, password, name, email) {
     const user = {
-            id: Date.now().toString(),
-            userid,
-            password,
-            name,
-            email,
-            url: "https://randomuser.me/api/portraits/men/29.jpg",
-        },
-        users = [user, ...users];
+        id: Date.now().toString(),
+        userid,
+        password,
+        name,
+        email,
+        url: "https://randomuser.me/api/portraits/men/29.jpg",
+    };
+    users = [user, ...users];
     return users;
 }
 
 export async function login(userid, password) {
-    const user = users.find(
-        (user) => user.userid === userid && user.password === password
-    );
-    return user;
+    try {
+        console.log(" authRepository에서 로그인 요청:", userid, password);
+        const user = users.find(
+            (user) => user.userid === userid && user.password === password
+        );
+        if (!user) {
+            console.error(" 사용자를 찾을 수 없음:", userid);
+            return null; // res.status를 여기서 사용하지 않고 null 반환
+        }
+        return user; // 로그인 성공 시 사용자 객체 반환
+    } catch (error) {
+        console.error(" 로그인 중 오류 발생:", error);
+        throw new Error("서버 내부 오류 발생"); // 오류 발생 시 throw로 예외 전달
+    }
+}
+
+export async function findByUserid(userid) {
+    return users.find((user) => user.userid === userid);
+}
+
+export async function findByid(id) {
+    return users.find((user) => user.id === id);
 }
