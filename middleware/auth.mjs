@@ -18,28 +18,40 @@ import { config } from "../config.mjs";
 
 const AUTH_ERROR = { message: "인증에러" };
 export const isAuth = async (req, res, next) => {
-    const authHeader = req.get("Authorization");
+    const authHeader = req.get("Authorization"); //Authorization 헤더 가져오기
     console.log(authHeader);
     if (!(authHeader && authHeader.startsWith("Bearer "))) {
-        console.log("헤더 에러");
+        console.log("헤더 에러"); //Authorization 헤더가 없거나 "Bearer"로 시작하지 않으면 인증 에러 반환
         return res.status(401).json(AUTH_ERROR);
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(" ")[1]; //토큰 추출
     console.log(token);
     jwt.verify(token, config.jwt.secretKey, async (error, decoded) => {
+        //wt.verify(token, secretKey, callback)을 이용해 토큰을 검증
         if (error) {
             console.log("토큰 에러");
             return res.status(401).json(AUTH_ERROR);
         }
-        console.log(decoded.id);
-        const user = await authRepository.findByid(decoded.id);
+        console.log(decoded.idx);
+        const user = await authRepository.findByid(decoded.idx);
+        //토큰 안의 decoded.id를 이용해 데이터베이스에서 사용자를 조회.
         if (!user) {
-            console.log("아이디 없음");
+            console.log("아이디 없음"); //사용자가 없으면 에러 반환
             return res.status(401).json(AUTH_ERROR);
         }
-        console.log("user.id: ", user.id);
+        console.log("user.idx: ", user.idx);
         console.log("user.userid: ", user.userid);
-        req.userid = user.userid;
+        req.useridx = user.idx;
         next();
     });
 };
+
+/*
+[요청] 
+ → Authorization 헤더 확인
+   → Bearer 토큰 추출
+     → 토큰 검증
+       → 사용자 확인
+         → 성공: req에 사용자 정보 추가 후 next()
+         → 실패: 401 에러 반환
+*/
