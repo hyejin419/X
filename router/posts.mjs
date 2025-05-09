@@ -10,6 +10,7 @@ const validatePost = [
     body("text").trim().isLength({ min: 5 }).withMessage("최소 5자이상 입력"),
     validate,
 ];
+
 // 모든 포스트 가져오기
 // 해당 아이디에 대한 포스트 가져오기
 // GET

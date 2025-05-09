@@ -9,7 +9,7 @@ const validateLogin = [
     body("userid")
         .trim()
         .isLength({ min: 4 })
-        .withMessage("최소 4자 이상 입력") // isLen에 대한 메시지.
+        .withMessage("최소 4자이상 입력")
         .matches(/^[a-zA-Z0-9]*$/)
         .withMessage("특수문자는 사용불가"),
     body("password")
@@ -25,6 +25,7 @@ const validateSignup = [
     body("email").trim().isEmail().withMessage("이메일 형식 확인"),
     validate,
 ];
+
 // 회원가입
 // POST
 // http://127.0.0.1:8080/auth/signup
